@@ -259,4 +259,20 @@ console.log(changes.map(it => it.user).filter(it => it?.groups?.includes('autoco
 
 const leaderboard = userAnalysis(users)
 
-console.log(leaderboard)
+const removeSmallNumbers = (map, threshold) => {
+    const newMap = new Map()
+    let other = 0
+    map.forEach((value, key) => {
+        if (value <= threshold) {
+            other+=value
+            return
+        } 
+        newMap.set(key, value)
+    })
+    return new Map([...newMap.entries()].sort((a, b) => b[1] - a[1]));
+
+}
+
+fs.writeFileSync("leaderboard.txt",Array.from(removeSmallNumbers(leaderboard, 5).entries()).map((it) => `${it[0]}: ${it[1]}`).join("\n"))
+
+console.log()
